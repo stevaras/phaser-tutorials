@@ -2,7 +2,7 @@ import Phaser from "phaser";
 
 const config = {
   type: Phaser.AUTO,
-  width: 1800,
+  width: 800,
   height: 600,
   physics: {
     default: "arcade",
@@ -32,7 +32,8 @@ let pipeVerticalPosition = Phaser.Math.Between(
   0 + 20,
   config.height - 20 - pipeVerticalDistance,
 );
-let pipeHorizontalDistance = Phaser.Math.Between(150, 500);
+let pipeHorizontalRange = Phaser.Math.Between(250, 400);
+let pipeHorizontalDistance = 400;
 let PIPES_TO_RENDER = 4;
 
 let initialBirdPosition = {
@@ -58,23 +59,24 @@ function create() {
     .setGravityY(300);
 
   for (let i = 0; i < PIPES_TO_RENDER; i++) {
-    let pipeHorizontalDistance = Phaser.Math.Between(250, 400);
-    let pipeVerticalDistance = Phaser.Math.Between(
+    let _pipeHorizontalDistance = pipeHorizontalDistance * (i + 1);
+    console.log(_pipeHorizontalDistance);
+    let _pipeVerticalDistance = Phaser.Math.Between(
       ...pipesVerticalDistanceRange,
     );
-    let pipeVerticalPosition = Phaser.Math.Between(
+    let _pipeVerticalPosition = Phaser.Math.Between(
       0 + 20,
-      config.height - 20 - pipeVerticalDistance,
+      config.height - 20 - _pipeVerticalDistance,
     );
 
     upperPipe = this.physics.add
-      .sprite(200 * i + pipeHorizontalDistance, pipeVerticalPosition, "pipe")
+      .sprite(_pipeHorizontalDistance, _pipeVerticalPosition, "pipe")
       .setOrigin(0, 1)
       .setVelocityX(-VELOCITY);
     lowerPipe = this.physics.add
       .sprite(
-        200 * i + pipeHorizontalDistance,
-        upperPipe.y + pipeVerticalDistance,
+        _pipeHorizontalDistance,
+        upperPipe.y + _pipeVerticalDistance,
         "pipe",
       )
       .setOrigin(0, 0)
