@@ -1,0 +1,9 @@
+const GAME_HEIGHT = 600;
+const GAME_WIDTH = 800; //5800;
+
+const BIRD_POSITION = {
+  x: 100,
+  y: GAME_HEIGHT / 2,
+};
+
+export { GAME_HEIGHT, GAME_WIDTH, BIRD_POSITION };
