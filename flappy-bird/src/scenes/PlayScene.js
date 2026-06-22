@@ -4,32 +4,34 @@ class PlayScene extends Phaser.Scene {
   constructor(config) {
     super("PlayScene");
 
-    this.bird = null;
-
     this.pipesVerticalDistanceRange = [150, 250];
     this.pipeHorizontalDistanceRange = [200, 400];
     this.initialNumberOfPipes = 4;
-    this.pipes = null;
-    this.gameOver = false;
     this.config = config;
-
     this.velocity = 150;
     this.flopVelocity = 200;
     this.birdGravity = 350;
-
-    this.recycling = false;
-    this.score = 0;
-    this.scoreText = null;
-    this.bestScore = +localStorage.getItem("bestScore") || 0;
     this.gamesPlayed = 0;
   }
 
-  preload() {
-    this.load.image("sky", "assets/sky.png");
-    this.load.image("bird", "assets/bird.png");
-    this.load.image("pipe", "assets/pipe.png");
-    this.load.image("pause", "assets/pause.png");
+  init(config) {
+    this.bird = null;
+    this.score = 0;
+    this.pipes = null;
+    this.gameOver = false;
+    this.isManuallyPaused = false;
+    this.recycling = false;
+    this.scoreText = null;
+    this.bestScore = +localStorage.getItem("bestScore") || 0;
+
+    if (config) {
+      this.score = config.score || 0;
+      this.bestScore = config.bestScore || this.bestScore;
+      this.gamesPlayed = config.gamesPlayed || this.gamesPlayed;
+    }
   }
+
+  preload() {}
 
   create() {
     this.createBG();
@@ -97,6 +99,12 @@ class PlayScene extends Phaser.Scene {
         // this.handlePause();
         this.scene.launch("PauseScene", { parentScene: this });
       }
+    });
+    this.input.keyboard.on("keydown-ESC", () => {
+      console.log("Escape key pressed");
+
+      // this.handlePause();
+      this.scene.start("MenuScene");
     });
   }
 
@@ -171,6 +179,7 @@ class PlayScene extends Phaser.Scene {
         this.score = 0;
         this.scoreText.setText(`Score: ${this.score}`);
 
+        this.gameOver = false;
         this.gamesPlayed += 1;
         this.scene.restart();
       },
@@ -188,7 +197,7 @@ class PlayScene extends Phaser.Scene {
   }
 
   flap() {
-    if (!this.gameOver || !this.physics.world.isPaused) {
+    if (!this.gameOver && !this.getManuallyPaused()) {
       this.bird.body.setVelocityY(-this.flopVelocity);
     }
   }
@@ -260,6 +269,14 @@ class PlayScene extends Phaser.Scene {
   increaseScore() {
     this.score += 1;
     this.scoreText.setText(`Score: ${this.score}`);
+  }
+
+  getManuallyPaused() {
+    return this.isManuallyPaused;
+  }
+
+  setManuallyPaused(value) {
+    this.isManuallyPaused = value;
   }
 }
 

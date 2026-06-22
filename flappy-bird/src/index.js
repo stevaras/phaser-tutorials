@@ -2,6 +2,8 @@ import Phaser from "phaser";
 import PlayScene from "./scenes/PlayScene";
 import { BIRD_POSITION, GAME_HEIGHT, GAME_WIDTH } from "./consts";
 import PauseScene from "./scenes/PauseScene";
+import MenuScene from "./scenes/MenuScene";
+import PreloadScene from "./scenes/PreloadScene";
 
 const SHARED_CONFIG = {
   game_width: GAME_WIDTH,
@@ -20,7 +22,12 @@ export const config = {
       debug: true,
     },
   },
-  scene: [new PlayScene(SHARED_CONFIG), new PauseScene(SHARED_CONFIG)],
+  scene: [
+    new PreloadScene(SHARED_CONFIG),
+    new MenuScene(SHARED_CONFIG),
+    new PlayScene(SHARED_CONFIG),
+    new PauseScene(SHARED_CONFIG),
+  ],
 };
 
 new Phaser.Game(config);
