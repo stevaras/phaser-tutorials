@@ -1,8 +1,8 @@
-import Phaser from "phaser";
+import BaseScene from "./BaseScene.js";
 
-class PlayScene extends Phaser.Scene {
+class PlayScene extends BaseScene {
   constructor(config) {
-    super("PlayScene");
+    super("PlayScene", config);
 
     this.pipesVerticalDistanceRange = [150, 250];
     this.pipeHorizontalDistanceRange = [200, 400];
@@ -34,7 +34,7 @@ class PlayScene extends Phaser.Scene {
   preload() {}
 
   create() {
-    this.createBG();
+    super.create();
     this.createBird(
       this.config.bird_start_position.x,
       this.config.bird_start_position.y,
@@ -106,13 +106,6 @@ class PlayScene extends Phaser.Scene {
       // this.handlePause();
       this.scene.start("MenuScene");
     });
-  }
-
-  createBG() {
-    // here the middle of the image is at the half of both dimensions because default origin is 0.5, 0.5
-    // this.add.image(config.width / 2, config.height / 2, "sky");
-    // here we set the origin to the top left corner, so the image starts at the top left corner of the canvas
-    this.add.image(0, 0, "sky").setOrigin(0, 0);
   }
 
   createBird(x, y) {
